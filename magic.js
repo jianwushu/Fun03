@@ -1,6 +1,6 @@
 // noinspection JSUnresolvedFunction,JSUnresolvedVariable
 
-const axios = require('axios');
+import axios from "axios"
 const fs = require("fs");
 const {format} = require("date-fns");
 const notify = require('./sendNotify');
