@@ -1,7 +1,8 @@
 /*
 2 10 20 5 * m_jd_wx_luckDraw.js
  */
-const {Env} =require('./magic.js') 
+let mode = __dirname.includes('magic')
+const {Env} = mode ? require('./magic.js') : require('./magic.js')
 const $ = new Env('M幸运抽奖');
 $.activityUrl = process.env.M_WX_LUCK_DRAW_URL
     ? process.env.M_WX_LUCK_DRAW_URL
