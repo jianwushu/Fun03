@@ -2,7 +2,7 @@
 2 10 20 5 * m_jd_wx_luckDraw.js
  */
 let mode = __dirname.includes('magic')
-const {Env} = mode ? require('./function/magic') : require('./function/magic')
+const {Env} = mode ? require('magic') : require('magic')
 const $ = new Env('M幸运抽奖');
 $.activityUrl = process.env.M_WX_LUCK_DRAW_URL
     ? process.env.M_WX_LUCK_DRAW_URL
