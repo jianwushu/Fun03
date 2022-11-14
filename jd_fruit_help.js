@@ -89,6 +89,10 @@ let NoNeedCodes = [];
             $.UA = require('./function/USER_AGENTS').USER_AGENT;
             $.retry = 0;
             await jdFruit();
+            if ($.index === 5){
+                console.log(`休息一会,60秒后继续`);
+                await $.wait(60 * 1000)
+            }
             await $.wait(5 * 1000)
         }
     }
@@ -102,6 +106,7 @@ let NoNeedCodes = [];
     .finally(() => {
         $.done();
     })
+
 async function jdFruit() {
     subTitle = `【京东账号${$.index}】${$.nickName || $.UserName}`;
     try {
@@ -234,7 +239,6 @@ async function masterHelpShare() {
     if (salveHelpAddWater > 0) {
         console.log(`【助力好友👬】获得${salveHelpAddWater}g💧\n`);
     }
-    console.log('助力好友结束，即将开始领取额外水滴奖励\n');
 }
 // 互助吗收集
 async function GetCollect() {
@@ -326,7 +330,7 @@ function timeFormat(time) {
 
 function requireConfig() {
     return new Promise(resolve => {
-        console.log('开始获取配置文件')
+        console.log('\n开始获取配置文件')
         notify = $.isNode() ? require('./function/sendNotify') : '';
         const jdCookieNode = $.isNode() ? require('./function/jdCookie.js') : '';
         if ($.isNode()) {
@@ -339,7 +343,6 @@ function requireConfig() {
         } else {
             cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
         }
-        console.log(`共${cookiesArr.length}个京东账号`)
         $.shareCodesArr = [];
         resolve()
     })

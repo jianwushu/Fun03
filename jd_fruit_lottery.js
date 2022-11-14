@@ -26,6 +26,7 @@ let lnrun = 0;
             cookie = cookiesArr[i];
             $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
             $.index = i + 1;
+            console.log(`\n开始【京东账号${$.index}】${$.UserName}\n`);
             message = '';
             subTitle = '';
             option = {};
@@ -105,7 +106,7 @@ async function lotteryForTurntableFarm() {
 }
 function requireConfig() {
     return new Promise(resolve => {
-        console.log('开始获取配置文件')
+        console.log('\n开始获取配置文件')
         notify = $.isNode() ? require('./function/sendNotify') : '';
         const jdCookieNode = $.isNode() ? require('./function/jdCookie.js') : '';
         if ($.isNode()) {
@@ -118,7 +119,6 @@ function requireConfig() {
         } else {
             cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
         }
-        console.log(`共${cookiesArr.length}个京东账号`)
         $.shareCodesArr = [];
         resolve()
     })
