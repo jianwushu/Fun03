@@ -129,6 +129,6 @@ const USER_AGENT = USER_AGENTS[randomNumber(0, USER_AGENTS.length)];
 const JX_USER_AGENT = USER_AGENTS[randomNumber(0, JX_USER_AGENTS.length)];
 
 module.exports = {
-  USER_AGENT,JX_USER_AGENT,
+  USER_AGENT,JX_USER_AGENT
 }
 

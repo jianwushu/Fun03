@@ -29,7 +29,7 @@ let lnrun = 0;
             message = '';
             subTitle = '';
             option = {};
-            $.UA = require('./function/USER_AGENTS').UARAM();
+            $.UA = require('./function/USER_AGENTS').USER_AGENT;
             $.retry = 0;
             lnrun++;
             await turntableFarm();
