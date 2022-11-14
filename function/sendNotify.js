@@ -130,7 +130,7 @@ const {
     getEnvs,
     DisableCk,
     getEnvByPtPin
-} = require('./ql');
+} = require('./ql.js');
 const fs = require('fs');
 let strCKFile = '/ql/scripts/CKName_cache.json';
 let Fileexists = fs.existsSync(strCKFile);
