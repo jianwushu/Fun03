@@ -16,6 +16,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
 let lnrun = 0;
 
 !(async () => {
+    await requireConfig();
     if (!cookiesArr[0]) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
         return;
@@ -28,7 +29,7 @@ let lnrun = 0;
             message = '';
             subTitle = '';
             option = {};
-            $.UA = require('./USER_AGENTS').UARAM();
+            $.UA = require('./function/USER_AGENTS').UARAM();
             $.retry = 0;
             lnrun++;
             await turntableFarm();
@@ -102,7 +103,26 @@ async function lotteryForTurntableFarm() {
     console.log('等待了2秒');
     $.lotteryRes = await request(arguments.callee.name.toString(), { type: 1, version: 4, channel: 1 });
 }
-
+function requireConfig() {
+    return new Promise(resolve => {
+        console.log('开始获取配置文件')
+        notify = $.isNode() ? require('./function/sendNotify') : '';
+        const jdCookieNode = $.isNode() ? require('./function/jdCookie.js') : '';
+        if ($.isNode()) {
+            Object.keys(jdCookieNode).forEach((item) => {
+                if (jdCookieNode[item]) {
+                    cookiesArr.push(jdCookieNode[item])
+                }
+            })
+            if (process.env.JD_DEBUG && process.env.JD_DEBUG === 'false') console.log = () => { };
+        } else {
+            cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
+        }
+        console.log(`共${cookiesArr.length}个京东账号`)
+        $.shareCodesArr = [];
+        resolve()
+    })
+}
 function TotalBean() {
     return new Promise(async resolve => {
         const options = {

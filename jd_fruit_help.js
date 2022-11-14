@@ -86,7 +86,7 @@ let NoNeedCodes = [];
             message = '';
             subTitle = '';
             option = {};
-            $.UA = require('./USER_AGENTS').UARAM();
+            $.UA = require('./function/USER_AGENTS').UARAM();
             $.retry = 0;
             await jdFruit();
             await $.wait(5 * 1000)
@@ -327,8 +327,8 @@ function timeFormat(time) {
 function requireConfig() {
     return new Promise(resolve => {
         console.log('开始获取配置文件')
-        notify = $.isNode() ? require('./sendNotify') : '';
-        const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+        notify = $.isNode() ? require('./function/sendNotify') : '';
+        const jdCookieNode = $.isNode() ? require('./function/jdCookie.js') : '';
         if ($.isNode()) {
             Object.keys(jdCookieNode).forEach((item) => {
                 if (jdCookieNode[item]) {
