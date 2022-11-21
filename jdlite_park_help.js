@@ -7,7 +7,12 @@ export HELP_JOYPARK=""
 0 1,7,20 * * * jd_joypark_task.js, tag=汪汪乐园每日任务, 
 
 */
+
+
 const $ = new Env('汪汪乐园_内部互助');
+const loadFile = require('load-any-file');
+const H5ST = loadFile('./function/h5st.ts');
+
 const jdCookieNode = $.isNode() ? require('./function/jdCookie.js') : '';
 const notify = $.isNode() ? require('./function/sendNotify') : '';
 
@@ -21,11 +26,9 @@ if ($.isNode()) {
 } else {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
-$.invitePinTaskList = []
 $.invitePin = []
 const JD_API_HOST = `https://api.m.jd.com/client.action`;
 
-message = ""
 !(async () => {
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取cookie\n', 'https://bean.m.jd.com/', {
@@ -33,60 +36,72 @@ message = ""
     });
     return;
   }
-  $.log("\n======收集互助码======\n")
-  for (let i = 0; i < cookiesArr.length; i++) {
-    $.UA = `jdapp;iPhone;10.1.4;13.1.2;${randomString(40)};network/wifi;model/iPhone8,1;addressid/2308460611;appBuild/167814;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`
+  h5stTool = new H5ST('4abce', 'jdltapp;', "9740943917498265")
+  await h5stTool.__genAlgo()
+  var h5st = h5stTool.__genH5st({
+    appid: "activities_platform",
+    body: JSON.stringify({"taskId":"","inviteType":"","inviterPin":"","linkId":"LsQNxL7iWDlXUs6cFl-AAg"}),
+    client: "android",
+    clientVersion: "4.3.0",
+    functionId: "joyBaseInfo",
+    t: timestamp.toString()
+  })
 
-    cookie = cookiesArr[i];
-    if (cookie) {
-      $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-      $.index = i + 1;
-      console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+  console.log(h5st)
+  // $.log("======收集互助码======")
+  // for (let i = 0; i < cookiesArr.length; i++) {
+  //   $.UA = `jdapp;iPhone;10.1.4;13.1.2;${randomString(40)};network/wifi;model/iPhone8,1;addressid/2308460611;appBuild/167814;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`
 
-      let resp = await getJoyBaseInfo("", "", "");
-      if (resp.success) {
-        console.log(resp.invitePin)
-        $.invitePin.push(resp.invitePin)
-      }
-      await $.wait(1000)
-    }
-  }
-  $.log("\n======汪汪乐园开始内部互助======\n")
-  for (let i = 0; i < cookiesArr.length; i++) {
-    $.UA = `jdapp;iPhone;10.1.4;13.1.2;${randomString(40)};network/wifi;model/iPhone8,1;addressid/2308460611;appBuild/167814;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`
+  //   cookie = cookiesArr[i];
+  //   if (cookie) {
+  //     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+  //     $.index = i + 1;
+  //     console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
 
-    cookie = cookiesArr[i];
-    if (cookie) {
-      $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-      $.index = i + 1;
-      $.isLogin = true;
-      $.nickName = '';
-      console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
-      $.newinvitePinTaskList = [ ...($.invitePin || [])]
-      for (const invitePinTaskListKey of $.newinvitePinTaskList) {
-        $.log(`【京东账号${$.index}】${$.nickName || $.UserName} 助力 ${invitePinTaskListKey}`)
-        let resp = await getJoyBaseInfo("610", 1, invitePinTaskListKey);
-        if (resp.success) {
-          if (resp.data.helpState === 1) {
-            $.log("助力成功！");
-          } else if (resp.data.helpState === 0) {
-            $.log("自己不能助力自己！");
-          } else if (resp.data.helpState === 2) {
-            $.log("助力过了！");
-          } else if (resp.data.helpState === 3) {
-            $.log("没有助力次数了！");
-            break
-          } else if (resp.data.helpState === 4) {
-            $.log("这个B助力满了！");
-          }
-        } else {
-          $.log("数据异常 助力失败！\n\n")
-          break
-        }
-      }
-    }
-    await $.wait(1000)
-  }
+  //     let resp = await getJoyBaseInfo("", "", "");
+  //     if (resp.success) {
+  //       console.log(resp.invitePin)
+  //       $.invitePin.push(resp.invitePin)
+  //     }
+  //     await $.wait(1000)
+  //   }
+  // }
+  // $.log("\n======汪汪乐园开始内部互助======\n")
+  // for (let i = 0; i < cookiesArr.length; i++) {
+  //   $.UA = `jdapp;iPhone;10.1.4;13.1.2;${randomString(40)};network/wifi;model/iPhone8,1;addressid/2308460611;appBuild/167814;jdSupportDarkMode/0;Mozilla/5.0 (iPhone; CPU iPhone OS 13_1_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1`
+
+  //   cookie = cookiesArr[i];
+  //   if (cookie) {
+  //     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+  //     $.index = i + 1;
+  //     $.isLogin = true;
+  //     $.nickName = '';
+  //     console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
+  //     $.newinvitePinTaskList = [ ...($.invitePin || [])]
+  //     for (const invitePinTaskListKey of $.newinvitePinTaskList) {
+  //       $.log(`【京东账号${$.index}】${$.nickName || $.UserName} 助力 ${invitePinTaskListKey}`)
+  //       let resp = await getJoyBaseInfo("610", 1, invitePinTaskListKey);
+  //       if (resp.success) {
+  //         if (resp.data.helpState === 1) {
+  //           $.log("助力成功！");
+  //         } else if (resp.data.helpState === 0) {
+  //           $.log("自己不能助力自己！");
+  //         } else if (resp.data.helpState === 2) {
+  //           $.log("助力过了！");
+  //         } else if (resp.data.helpState === 3) {
+  //           $.log("没有助力次数了！");
+  //           break
+  //         } else if (resp.data.helpState === 4) {
+  //           $.log("这个B助力满了！");
+  //         }
+  //       } else {
+  //         $.log("数据异常 助力失败！\n\n")
+  //         break
+  //       }
+  //     }
+  //   }
+  //   await $.wait(1000)
+  // }
 })()
   .catch((e) => $.logErr(e))
   .finally(() => $.done())
@@ -101,7 +116,7 @@ message = ""
  */
 function getJoyBaseInfo(taskId = '', inviteType = '', inviterPin = '') {
   return new Promise(resolve => {
-    $.post(taskPostClientActionUrl(`functionId=${functionId}&body={"taskId":"${taskId}","inviteType":"${inviteType}","inviterPin":"${inviterPin}","linkId":"LsQNxL7iWDlXUs6cFl-AAg"}&_t=1625480372020&appid=activities_platform`, `joyBaseInfo`), async (err, resp, data) => {
+    $.post(taskPostClientActionUrl(`body={"taskId":"${taskId}","inviteType":"${inviteType}","inviterPin":"${inviterPin}","linkId":"LsQNxL7iWDlXUs6cFl-AAg"}&_t=1625480372020&appid=activities_platform`, `joyBaseInfo`), async (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
@@ -121,7 +136,7 @@ function getJoyBaseInfo(taskId = '', inviteType = '', inviterPin = '') {
 
 function taskPostClientActionUrl(body, functionId) {
   return {
-    url: `https://api.m.jd.com/client.action`,
+    url: `https://api.m.jd.com/client.action?functionId=${functionId}`,
     body: body,
     headers: {
       'User-Agent': $.UA,
