@@ -1,0 +1,28 @@
+{
+  "name": "fun03",
+  "version": "1.0.0",
+  "main": "jdlite_park_help.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jianwushu/Fun03.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jianwushu/Fun03/issues"
+  },
+  "homepage": "https://github.com/jianwushu/Fun03#readme",
+  "description": "",
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/crypto-js": "^4.1.1",
+    "@types/date-fns": "^2.6.0"
+  },
+  "dependencies": {
+    "crypto-js": "^4.1.1"
+  }
+}
